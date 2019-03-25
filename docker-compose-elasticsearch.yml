@@ -9,11 +9,12 @@ version: '2'
 services:
   # Run Elasticsearch instead of MySQL
   storage:
-    image: openzipkin/zipkin-elasticsearch6
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.1 
     container_name: elasticsearch
     # Uncomment to expose the storage port for testing
-    # ports:
-    #   - 9200:9200
+    ports:
+      - 9200:9200
+      - 9300:9300
 
   # Switch storage type to Elasticsearch
   zipkin:
@@ -24,6 +25,13 @@ services:
       - ES_HOSTS=elasticsearch
       # Uncomment to see requests to and from elasticsearch
       # - ES_HTTP_LOGGING=BODY
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:6.6.1
+    ports:
+      - "5601:5601"
+    environment:
+      - ES_HOSTS=elasticsearc
 
   dependencies:
     environment:
